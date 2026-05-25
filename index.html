@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Open GSD Marketplace — Coming Soon</title>
+  <meta name="description" content="The Open GSD Marketplace is coming soon. A community hub for shipping AI-assisted projects." />
+  <link rel="icon" href="https://opengsd.net/opengsd-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --background: #050507;
+      --background-elevated: #0d0d14;
+      --border: #1b1b2a;
+      --foreground: #e7e8f0;
+      --muted: #8b8ca6;
+      --accent: #22d3ee;
+      --accent-strong: #38e0ff;
+      --purple: #a855f7;
+      --grad: linear-gradient(90deg, #a855f7 0%, #6366f1 48%, #22d3ee 100%);
+      --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ambient gradient glow */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(60vw 60vw at 15% 10%, rgba(168, 85, 247, 0.18), transparent 60%),
+        radial-gradient(50vw 50vw at 85% 90%, rgba(34, 211, 238, 0.18), transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* subtle grid */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .shell {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      color: var(--foreground);
+    }
+
+    .brand img { width: 28px; height: 28px; }
+
+    .brand .sub {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      padding: 4px 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-left: 8px;
+    }
+
+    .nav-link {
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      font-family: var(--font-mono);
+      transition: color 0.15s ease;
+    }
+    .nav-link:hover { color: var(--foreground); }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 32px;
+    }
+
+    .hero {
+      max-width: 720px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--background-elevated);
+      margin-bottom: 28px;
+    }
+
+    .badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent-strong);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      line-height: 1.05;
+      margin-bottom: 24px;
+    }
+
+    .grad {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .lede {
+      font-size: 1.125rem;
+      color: var(--muted);
+      max-width: 540px;
+      margin: 0 auto 40px;
+    }
+
+    .tagline {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .cta {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      font-family: var(--font-sans);
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--foreground);
+      color: var(--background);
+    }
+    .btn-primary:hover {
+      background: var(--accent-strong);
+      box-shadow: 0 0 32px rgba(56, 224, 255, 0.4);
+    }
+
+    .btn-ghost {
+      background: var(--background-elevated);
+      color: var(--foreground);
+      border-color: var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--muted); }
+
+    footer {
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--foreground); }
+
+    @media (max-width: 640px) {
+      header, footer { padding: 20px; }
+      footer { flex-direction: column; gap: 8px; text-align: center; }
+      main { padding: 32px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <a href="https://opengsd.net" class="brand">
+        <img src="https://opengsd.net/opengsd-logo.png" alt="Open GSD" />
+        <span>Open GSD</span>
+        <span class="sub">marketplace</span>
+      </a>
+      <a href="https://opengsd.net" class="nav-link">← opengsd.net</a>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="badge">
+          <span class="dot"></span>
+          <span>Under construction</span>
+        </div>
+        <p class="tagline">Git. Ship. Done.</p>
+        <h1>The <span class="grad">Marketplace</span><br />is coming soon.</h1>
+        <p class="lede">
+          A community hub for the agents, templates, and tooling that power the Open GSD workflow.
+          One install. Ship more. Worry less.
+        </p>
+        <div class="cta">
+          <a class="btn btn-primary" href="https://opengsd.net">Visit Open GSD</a>
+          <a class="btn btn-ghost" href="https://github.com/open-gsd">View on GitHub</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>© <span id="year"></span> Open GSD</span>
+      <span>Built in public · <a href="https://opengsd.net">opengsd.net</a></span>
+    </footer>
+  </div>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

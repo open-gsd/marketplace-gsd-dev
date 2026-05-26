@@ -1,282 +1,661 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Open GSD Marketplace — Coming Soon</title>
-  <meta name="description" content="The Open GSD Marketplace is coming soon. A community hub for shipping AI-assisted projects." />
-  <link rel="icon" href="https://opengsd.net/opengsd-logo.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Open GSD Marketplace</title>
+  <meta name="description" content="The Open GSD Marketplace is coming soon: agents, templates, and workflow packs for AI-assisted engineering.">
+  <link rel="icon" href="https://opengsd.net/opengsd-logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
   <style>
     :root {
-      --background: #050507;
-      --background-elevated: #0d0d14;
-      --border: #1b1b2a;
-      --foreground: #e7e8f0;
-      --muted: #8b8ca6;
-      --accent: #22d3ee;
-      --accent-strong: #38e0ff;
-      --purple: #a855f7;
-      --grad: linear-gradient(90deg, #a855f7 0%, #6366f1 48%, #22d3ee 100%);
+      --background: oklch(0.15 0.003 260);
+      --background-elevated: oklch(0.2 0.004 260);
+      --foreground: oklch(0.92 0.004 260);
+      --muted: oklch(0.68 0.006 260);
+      --accent: oklch(0.72 0.055 224);
+      --accent-strong: oklch(0.82 0.052 224);
+      --brass: oklch(0.68 0.045 58);
+      --green: oklch(0.7 0.042 154);
+      --border: oklch(0.32 0.006 260);
+      --accent-shadow: 0, 0, 0;
       --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
       --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root[data-theme="light"] {
+      --background: oklch(0.982 0.006 248);
+      --background-elevated: oklch(0.955 0.008 248);
+      --foreground: oklch(0.22 0.018 248);
+      --muted: oklch(0.5 0.022 248);
+      --accent: oklch(0.44 0.08 238);
+      --accent-strong: oklch(0.34 0.08 238);
+      --brass: oklch(0.48 0.075 62);
+      --green: oklch(0.45 0.065 158);
+      --border: oklch(0.86 0.012 248);
+      --accent-shadow: 41, 83, 132;
+    }
 
-    html, body { height: 100%; }
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: var(--font-sans);
+      margin: 0;
+      min-height: 100vh;
       background: var(--background);
       color: var(--foreground);
-      -webkit-font-smoothing: antialiased;
+      font-family: var(--font-sans);
       line-height: 1.5;
-      overflow-x: hidden;
-      position: relative;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ambient gradient glow */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(60vw 60vw at 15% 10%, rgba(168, 85, 247, 0.18), transparent 60%),
-        radial-gradient(50vw 50vw at 85% 90%, rgba(34, 211, 238, 0.18), transparent 60%);
-      pointer-events: none;
-      z-index: 0;
+    body::selection {
+      background: var(--accent);
+      color: var(--background);
     }
 
-    /* subtle grid */
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(var(--border) 1px, transparent 1px),
-        linear-gradient(90deg, var(--border) 1px, transparent 1px);
-      background-size: 64px 64px;
-      mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-      opacity: 0.25;
-      pointer-events: none;
-      z-index: 0;
-    }
+    a { color: inherit; }
 
     .shell {
-      position: relative;
-      z-index: 1;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, color-mix(in oklch, var(--background-elevated) 72%, transparent) 0, transparent 460px),
+        linear-gradient(90deg, transparent 0, transparent calc(50% - 560px), color-mix(in oklch, var(--foreground) 8%, transparent) calc(50% - 560px), color-mix(in oklch, var(--foreground) 8%, transparent) calc(50% - 559px), transparent calc(50% - 559px), transparent calc(50% + 559px), color-mix(in oklch, var(--foreground) 8%, transparent) calc(50% + 559px), color-mix(in oklch, var(--foreground) 8%, transparent) calc(50% + 560px), transparent calc(50% + 560px)),
+        var(--background);
+      isolation: isolate;
+      position: relative;
     }
 
-    header {
-      padding: 24px 32px;
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        repeating-linear-gradient(180deg, transparent 0 95px, color-mix(in oklch, var(--foreground) 5%, transparent) 95px 96px),
+        repeating-linear-gradient(135deg, transparent 0 18px, color-mix(in oklch, var(--accent) 4%, transparent) 18px 19px);
+      mask-image: linear-gradient(90deg, transparent 0, black 12%, black 88%, transparent 100%);
+      opacity: 0.62;
+      pointer-events: none;
+    }
+
+    .shell::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(90deg, color-mix(in oklch, var(--foreground) 4%, transparent), transparent 30%),
+        linear-gradient(270deg, color-mix(in oklch, var(--accent) 4%, transparent), transparent 34%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in oklch, var(--background) 82%, transparent);
+      backdrop-filter: blur(16px);
+    }
+
+    .nav-inner,
+    .section,
+    .footer-inner {
+      width: min(100% - 32px, 1120px);
+      margin: 0 auto;
+    }
+
+    .nav-inner {
+      min-height: 68px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 24px;
     }
 
     .brand {
-      display: flex;
+      display: inline-flex;
+      min-height: 44px;
       align-items: center;
       gap: 10px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
+      border-radius: 999px;
+      padding-right: 12px;
       text-decoration: none;
-      color: var(--foreground);
+      transition: opacity 180ms cubic-bezier(0.2, 0, 0, 1), transform 180ms cubic-bezier(0.2, 0, 0, 1);
     }
 
-    .brand img { width: 28px; height: 28px; }
+    .brand:hover { opacity: 0.9; }
+    .brand:active { transform: scale(0.96); }
 
-    .brand .sub {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--muted);
-      padding: 4px 8px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      margin-left: 8px;
+    .brand img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      outline: 1px solid color-mix(in oklch, var(--foreground) 12%, transparent);
+      filter: saturate(0.58) contrast(0.96) brightness(1.06);
     }
 
-    .nav-link {
+    .brand-name {
       font-size: 14px;
-      color: var(--muted);
-      text-decoration: none;
-      font-family: var(--font-mono);
-      transition: color 0.15s ease;
+      font-weight: 700;
+      letter-spacing: 0;
     }
-    .nav-link:hover { color: var(--foreground); }
 
-    main {
-      flex: 1;
+    .nav-links {
       display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 48px 32px;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 14px;
     }
 
+    .nav-links a {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 7px;
+      text-decoration: none;
+      transition: color 180ms cubic-bezier(0.2, 0, 0, 1), transform 180ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .nav-links a:hover { color: var(--foreground); }
+    .nav-links a:active { transform: scale(0.96); }
+
+    .theme-toggle {
+      width: 48px;
+      height: 28px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--background-elevated);
+      color: var(--muted);
+      box-shadow: inset 0 0 0 1px var(--border);
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .theme-toggle span {
+      display: block;
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: var(--foreground);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+      transform: translateX(0);
+      transition: transform 180ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    :root[data-theme="light"] .theme-toggle span { transform: translateX(20px); }
+
     .hero {
-      max-width: 720px;
+      padding: 80px 0 58px;
       text-align: center;
     }
 
-    .badge {
+    .hero-panel {
+      width: min(100%, 960px);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 32px;
+      align-items: end;
+      border-radius: 18px;
+      background: color-mix(in oklch, var(--background-elevated) 70%, transparent);
+      box-shadow: inset 0 0 0 1px var(--border), 0 18px 48px rgba(0, 0, 0, 0.24);
+      padding: 40px;
+      text-align: left;
+    }
+
+    :root[data-theme="light"] .hero-panel,
+    :root[data-theme="light"] .surface {
+      box-shadow: inset 0 0 0 1px var(--border), 0 18px 48px rgba(18, 24, 38, 0.08);
+    }
+
+    .eyebrow {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      font-family: var(--font-mono);
+      margin: 0 0 20px;
+      color: var(--accent);
       font-size: 12px;
-      color: var(--muted);
-      padding: 6px 12px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: var(--background-elevated);
-      margin-bottom: 28px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
     }
 
-    .badge .dot {
+    .eyebrow::before {
+      content: "";
       width: 6px;
       height: 6px;
-      border-radius: 50%;
+      border-radius: 999px;
       background: var(--accent);
-      box-shadow: 0 0 12px var(--accent-strong);
-      animation: pulse 2s ease-in-out infinite;
+      box-shadow: 0 0 0 4px color-mix(in oklch, var(--accent) 14%, transparent);
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
+    h1,
+    h2,
+    h3,
+    p { margin-top: 0; }
 
     h1 {
-      font-size: clamp(2.5rem, 6vw, 4.5rem);
-      font-weight: 600;
-      letter-spacing: -0.035em;
-      line-height: 1.05;
-      margin-bottom: 24px;
+      max-width: 720px;
+      margin-bottom: 16px;
+      color: var(--foreground);
+      font-size: clamp(3.25rem, 9vw, 6.5rem);
+      line-height: 0.92;
+      letter-spacing: 0;
+      font-weight: 800;
     }
 
-    .grad {
-      background: var(--grad);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .lede {
-      font-size: 1.125rem;
+    .hero-copy {
+      max-width: 680px;
+      margin: 0;
       color: var(--muted);
-      max-width: 540px;
-      margin: 0 auto 40px;
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
+      line-height: 1.7;
     }
 
-    .tagline {
+    .hero-copy strong { color: var(--foreground); font-weight: 600; }
+
+    .hero-logo {
+      width: 112px;
+      height: 112px;
+      border-radius: 22px;
+      outline: 1px solid color-mix(in oklch, var(--foreground) 12%, transparent);
+      filter: saturate(0.58) contrast(0.96) brightness(1.06);
+    }
+
+    .hero-note {
+      max-width: 700px;
+      margin: 30px auto 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 9px;
+      padding: 10px 18px;
+      color: var(--foreground);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: color 180ms cubic-bezier(0.2, 0, 0, 1), background 180ms cubic-bezier(0.2, 0, 0, 1), box-shadow 180ms cubic-bezier(0.2, 0, 0, 1), transform 180ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .button:active { transform: scale(0.96); }
+
+    .button-primary {
+      background: var(--accent);
+      color: var(--background);
+      box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--accent-strong) 30%, transparent), 0 14px 28px rgba(var(--accent-shadow), 0.26);
+    }
+
+    .button-primary:hover {
+      background: var(--accent-strong);
+      box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--accent-strong) 44%, transparent), 0 16px 34px rgba(var(--accent-shadow), 0.3);
+    }
+
+    .button-secondary {
+      background: var(--background-elevated);
+      box-shadow: inset 0 0 0 1px var(--border);
+    }
+
+    .button-secondary:hover {
+      color: var(--accent-strong);
+      box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--accent) 42%, transparent), 0 14px 28px rgba(0, 0, 0, 0.22);
+    }
+
+    .section {
+      padding: 72px 0;
+    }
+
+    .section-band {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in oklch, var(--background-elevated) 42%, transparent);
+    }
+
+    .section-head {
+      width: min(100%, 680px);
+      margin: 0 auto 34px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 12px;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.05;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .launch-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .surface {
+      border-radius: 14px;
+      background: color-mix(in oklch, var(--background-elevated) 64%, transparent);
+      box-shadow: inset 0 0 0 1px var(--border), 0 18px 48px rgba(0, 0, 0, 0.24);
+      padding: 24px;
+    }
+
+    .surface-accent {
+      box-shadow:
+        inset 0 0 0 1px color-mix(in oklch, var(--accent) 36%, transparent),
+        0 18px 48px rgba(0, 0, 0, 0.24),
+        0 16px 34px -24px color-mix(in oklch, var(--accent) 42%, transparent);
+    }
+
+    .kicker {
+      margin-bottom: 10px;
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .surface h3 {
+      margin-bottom: 10px;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    .surface p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .status-row {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .status-panel {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .terminal {
+      border-radius: 12px;
+      background: color-mix(in oklch, var(--background) 82%, black);
+      box-shadow: inset 0 0 0 1px var(--border);
+      padding: 18px;
+      color: var(--foreground);
       font-family: var(--font-mono);
       font-size: 13px;
-      color: var(--muted);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-bottom: 20px;
+      line-height: 1.75;
+      overflow: auto;
     }
 
-    .cta {
-      display: flex;
+    .terminal span { color: var(--muted); }
+    .terminal strong { color: var(--green); font-weight: 600; }
+
+    .steps {
+      display: grid;
       gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
     }
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 500;
-      text-decoration: none;
-      transition: all 0.15s ease;
-      font-family: var(--font-sans);
-      cursor: pointer;
-      border: 1px solid transparent;
-    }
-
-    .btn-primary {
-      background: var(--foreground);
-      color: var(--background);
-    }
-    .btn-primary:hover {
-      background: var(--accent-strong);
-      box-shadow: 0 0 32px rgba(56, 224, 255, 0.4);
-    }
-
-    .btn-ghost {
-      background: var(--background-elevated);
-      color: var(--foreground);
-      border-color: var(--border);
-    }
-    .btn-ghost:hover { border-color: var(--muted); }
-
-    footer {
-      padding: 24px 32px;
+    .step {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--muted);
-      border-top: 1px solid var(--border);
+      gap: 16px;
+      border-radius: 12px;
+      background: color-mix(in oklch, var(--background) 76%, transparent);
+      box-shadow: inset 0 0 0 1px var(--border);
+      padding: 14px 16px;
+      font-size: 14px;
     }
 
-    footer a { color: var(--muted); text-decoration: none; }
-    footer a:hover { color: var(--foreground); }
+    .step b { font-family: var(--font-mono); font-size: 13px; }
+    .step span { color: var(--muted); }
+
+    .footer {
+      border-top: 1px solid var(--border);
+      background: color-mix(in oklch, var(--background-elevated) 42%, transparent);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 30px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-brand img {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      outline: 1px solid color-mix(in oklch, var(--foreground) 12%, transparent);
+      filter: saturate(0.58) contrast(0.96) brightness(1.06);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 18px;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+      transition: color 180ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    @media (max-width: 860px) {
+      .nav-links a[href="#launch"] { display: none; }
+      .hero { padding-top: 56px; }
+      .hero-panel,
+      .status-row,
+      .launch-grid { grid-template-columns: 1fr; }
+      .hero-logo { display: none; }
+    }
 
     @media (max-width: 640px) {
-      header, footer { padding: 20px; }
-      footer { flex-direction: column; gap: 8px; text-align: center; }
-      main { padding: 32px 20px; }
+      .nav-inner,
+      .section,
+      .footer-inner { width: min(100% - 24px, 1120px); }
+      .nav-inner { min-height: 62px; }
+      .nav-links { gap: 10px; }
+      .nav-links a[href="#catalog"] { display: none; }
+      .hero-panel { padding: 26px; border-radius: 14px; }
+      .hero { padding-bottom: 44px; }
+      h1 { font-size: clamp(3rem, 18vw, 4.6rem); }
+      .hero-note { font-size: 16px; }
+      .section { padding: 52px 0; }
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
 <body>
   <div class="shell">
-    <header>
-      <a href="https://opengsd.net" class="brand">
-        <img src="https://opengsd.net/opengsd-logo.png" alt="Open GSD" />
-        <span>Open GSD</span>
-        <span class="sub">marketplace</span>
-      </a>
-      <a href="https://opengsd.net" class="nav-link">← opengsd.net</a>
+    <header class="nav">
+      <nav class="nav-inner" aria-label="Main navigation">
+        <a class="brand" href="https://opengsd.net">
+          <img src="https://opengsd.net/opengsd-logo.png" alt="Open GSD">
+          <span class="brand-name">Open GSD Marketplace</span>
+        </a>
+        <div class="nav-links">
+          <a href="#catalog">Catalog</a>
+          <a href="#launch">Launch</a>
+          <a href="https://opengsd.net">opengsd.net</a>
+          <button class="theme-toggle" type="button" aria-label="Toggle theme" id="theme-toggle"><span></span></button>
+        </div>
+      </nav>
     </header>
 
     <main>
       <section class="hero">
-        <div class="badge">
-          <span class="dot"></span>
-          <span>Under construction</span>
+        <div class="section">
+          <div class="hero-panel">
+            <div>
+              <p class="eyebrow">Verified workflow packs</p>
+              <h1>Marketplace</h1>
+              <p class="hero-copy">
+                The community hub for Open GSD agents, templates, and tooling is coming soon.
+                <strong>Install less ceremony, ship more verified work.</strong>
+              </p>
+            </div>
+            <img class="hero-logo" src="https://opengsd.net/opengsd-logo.png" alt="" aria-hidden="true">
+          </div>
+
+          <p class="hero-note">
+            Built for the same execution loop as Open GSD: clean context, reproducible workflows,
+            useful artifacts, and honest handoffs.
+          </p>
+
+          <div class="actions">
+            <a class="button button-primary" href="https://opengsd.net">Visit Open GSD</a>
+            <a class="button button-secondary" href="https://github.com/open-gsd">View GitHub</a>
+          </div>
         </div>
-        <p class="tagline">Git. Ship. Done.</p>
-        <h1>The <span class="grad">Marketplace</span><br />is coming soon.</h1>
-        <p class="lede">
-          A community hub for the agents, templates, and tooling that power the Open GSD workflow.
-          One install. Ship more. Worry less.
-        </p>
-        <div class="cta">
-          <a class="btn btn-primary" href="https://opengsd.net">Visit Open GSD</a>
-          <a class="btn btn-ghost" href="https://github.com/open-gsd">View on GitHub</a>
+      </section>
+
+      <section class="section-band" id="catalog">
+        <div class="section">
+          <div class="section-head">
+            <p class="eyebrow">Catalog preview</p>
+            <h2>Three ways to extend the loop.</h2>
+            <p>Marketplace entries will be practical, inspectable, and built around real project motion.</p>
+          </div>
+
+          <div class="launch-grid">
+            <article class="surface">
+              <div class="kicker">Agents</div>
+              <h3>Specialized execution help</h3>
+              <p>Drop in agents for diagnosis, planning, verification, documentation, release prep, and focused codebase analysis.</p>
+            </article>
+            <article class="surface surface-accent">
+              <div class="kicker">Templates</div>
+              <h3>Project-ready starting points</h3>
+              <p>Reusable scaffolds for workflows, repo conventions, issue shapes, implementation plans, and handoff documents.</p>
+            </article>
+            <article class="surface">
+              <div class="kicker">Tooling</div>
+              <h3>Utilities that survive handoff</h3>
+              <p>Small, composable additions for setup, validation, automation, and evidence capture across the Open GSD ecosystem.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="launch">
+        <div class="status-row">
+          <div class="surface status-panel">
+            <div>
+              <p class="eyebrow">Launch status</p>
+              <h2>Quietly building the useful part first.</h2>
+              <p>
+                The marketplace opens after the submission format, review checklist, and install paths are boring in the best way:
+                predictable, reversible, and easy to inspect.
+              </p>
+            </div>
+            <div class="terminal" role="group" aria-label="Marketplace readiness checklist">
+              <div><span>$</span> gsd marketplace status</div>
+              <div><strong>ready</strong> design language synced</div>
+              <div><strong>active</strong> catalog structure in progress</div>
+              <div><strong>next</strong> verified submission flow</div>
+            </div>
+          </div>
+
+          <div class="steps">
+            <div class="step">
+              <b>01</b>
+              <span>Package format</span>
+            </div>
+            <div class="step">
+              <b>02</b>
+              <span>Review checklist</span>
+            </div>
+            <div class="step">
+              <b>03</b>
+              <span>Install flow</span>
+            </div>
+            <div class="step">
+              <b>04</b>
+              <span>Community submissions</span>
+            </div>
+          </div>
         </div>
       </section>
     </main>
 
-    <footer>
-      <span>© <span id="year"></span> Open GSD</span>
-      <span>Built in public · <a href="https://opengsd.net">opengsd.net</a></span>
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="https://opengsd.net/opengsd-logo.png" alt="" aria-hidden="true">
+          <span>Open GSD · MIT Licensed · <span id="year"></span></span>
+        </div>
+        <div class="footer-links">
+          <a href="https://opengsd.net">Open GSD</a>
+          <a href="https://github.com/open-gsd">GitHub</a>
+        </div>
+      </div>
     </footer>
   </div>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+
+  <script>
+    const root = document.documentElement;
+    const toggle = document.getElementById("theme-toggle");
+    const storedTheme = localStorage.getItem("theme");
+    const initialTheme = storedTheme || "dark";
+
+    root.dataset.theme = initialTheme;
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    toggle.addEventListener("click", () => {
+      const nextTheme = root.dataset.theme === "light" ? "dark" : "light";
+      root.dataset.theme = nextTheme;
+      localStorage.setItem("theme", nextTheme);
+    });
+  </script>
 </body>
 </html>

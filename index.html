@@ -526,7 +526,6 @@
         <div class="nav-links">
           <a href="#catalog">Catalog</a>
           <a href="#launch">Launch</a>
-          <a href="https://opengsd.net">opengsd.net</a>
           <button class="theme-toggle" type="button" aria-label="Toggle theme" id="theme-toggle"><span></span></button>
         </div>
       </nav>
@@ -632,7 +631,7 @@
       <div class="footer-inner">
         <div class="footer-brand">
           <img src="https://opengsd.net/opengsd-logo.png" alt="" aria-hidden="true">
-          <span>Open GSD · MIT Licensed · <span id="year"></span></span>
+          <span>Open GSD</span>
         </div>
         <div class="footer-links">
           <a href="https://opengsd.net">Open GSD</a>
@@ -649,7 +648,6 @@
     const initialTheme = storedTheme || "dark";
 
     root.dataset.theme = initialTheme;
-    document.getElementById("year").textContent = new Date().getFullYear();
 
     toggle.addEventListener("click", () => {
       const nextTheme = root.dataset.theme === "light" ? "dark" : "light";

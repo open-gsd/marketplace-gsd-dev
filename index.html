@@ -158,7 +158,10 @@
     .brand:hover { opacity: 0.9; }
     .brand:active { transform: scale(0.96); }
 
-    .brand-title {
+    .brand-wordmark {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.28em;
       font-family: var(--font-logo);
       font-size: 20px;
       font-weight: 700;
@@ -167,10 +170,20 @@
       text-transform: uppercase;
       transform: scaleX(1.12);
       transform-origin: left center;
+    }
+
+    .brand-wordmark-open {
       color: var(--foreground);
       text-shadow:
         0 1px 0 color-mix(in oklch, var(--foreground) 24%, transparent),
         0 6px 18px rgba(0, 0, 0, 0.24);
+    }
+
+    .brand-wordmark-gsd {
+      color: var(--logo-blue-strong);
+      text-shadow:
+        0 1px 0 color-mix(in oklch, var(--logo-blue-strong) 18%, transparent),
+        0 6px 18px rgba(var(--accent-shadow), 0.24);
     }
 
     .nav-links {
@@ -542,7 +555,10 @@
     <header class="nav">
       <nav class="nav-inner" aria-label="Main navigation">
         <a class="brand" href="https://opengsd.net">
-          <span class="brand-title">GSD Marketplace</span>
+          <span class="brand-wordmark">
+            <span class="brand-wordmark-gsd">GSD</span>
+            <span class="brand-wordmark-open">Marketplace</span>
+          </span>
         </a>
         <div class="nav-links">
           <a href="#catalog">Catalog</a>

@@ -18,37 +18,50 @@
   <meta name="twitter:description" content="Agents, templates, and tooling for shipping verified AI-assisted work.">
   <meta name="twitter:image" content="https://marketplace-gsd-dev.vercel.app/og-image.jpg">
   <meta name="twitter:image:alt" content="Open GSD Marketplace preview">
-  <link rel="icon" href="https://opengsd.net/opengsd-logo.png">
+  <link rel="icon" href="/open-gsd-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500;600&amp;family=Rajdhani:wght@700&amp;display=swap" rel="stylesheet">
   <style>
     :root {
-      --background: oklch(0.15 0.003 260);
-      --background-elevated: oklch(0.2 0.004 260);
-      --foreground: oklch(0.92 0.004 260);
-      --muted: oklch(0.68 0.006 260);
-      --accent: oklch(0.72 0.055 224);
-      --accent-strong: oklch(0.82 0.052 224);
-      --brass: oklch(0.68 0.045 58);
-      --green: oklch(0.7 0.042 154);
-      --border: oklch(0.32 0.006 260);
-      --accent-shadow: 0, 0, 0;
+      --background: oklch(0.132 0.004 252);
+      --background-elevated: oklch(0.185 0.005 252);
+      --foreground: oklch(0.9 0.006 245);
+      --muted: oklch(0.64 0.009 245);
+      --accent: oklch(0.55 0.068 255);
+      --accent-strong: oklch(0.66 0.072 255);
+      --brass: oklch(0.56 0.045 75);
+      --green: oklch(0.65 0.035 160);
+      --border: oklch(0.28 0.007 252);
+      --accent-soft: oklch(0.245 0.032 255);
+      --accent-shadow: 31, 70, 122;
+      --logo-metal-top: oklch(0.32 0.006 245);
+      --logo-metal-bottom: oklch(0.18 0.006 245);
+      --logo-ink: oklch(0.92 0.006 245);
+      --logo-blue: oklch(0.48 0.08 255);
+      --logo-blue-strong: oklch(0.58 0.085 255);
       --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
       --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+      --font-logo: "Rajdhani", "Geist", ui-sans-serif, system-ui, sans-serif;
     }
 
     :root[data-theme="light"] {
-      --background: oklch(0.982 0.006 248);
-      --background-elevated: oklch(0.955 0.008 248);
-      --foreground: oklch(0.22 0.018 248);
-      --muted: oklch(0.5 0.022 248);
-      --accent: oklch(0.44 0.08 238);
-      --accent-strong: oklch(0.34 0.08 238);
-      --brass: oklch(0.48 0.075 62);
+      --background: oklch(0.972 0.006 245);
+      --background-elevated: oklch(0.942 0.007 245);
+      --foreground: oklch(0.22 0.012 245);
+      --muted: oklch(0.48 0.015 245);
+      --accent: oklch(0.44 0.075 255);
+      --accent-strong: oklch(0.34 0.08 255);
+      --brass: oklch(0.48 0.055 75);
       --green: oklch(0.45 0.065 158);
-      --border: oklch(0.86 0.012 248);
-      --accent-shadow: 41, 83, 132;
+      --border: oklch(0.835 0.01 245);
+      --accent-soft: oklch(0.89 0.028 255);
+      --accent-shadow: 36, 74, 126;
+      --logo-metal-top: oklch(0.35 0.006 245);
+      --logo-metal-bottom: oklch(0.22 0.006 245);
+      --logo-ink: oklch(0.94 0.006 245);
+      --logo-blue: oklch(0.44 0.08 255);
+      --logo-blue-strong: oklch(0.52 0.085 255);
     }
 
     * { box-sizing: border-box; }
@@ -136,7 +149,7 @@
       display: inline-flex;
       min-height: 44px;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       border-radius: 999px;
       padding-right: 12px;
       text-decoration: none;
@@ -146,18 +159,45 @@
     .brand:hover { opacity: 0.9; }
     .brand:active { transform: scale(0.96); }
 
-    .brand img {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      outline: 1px solid color-mix(in oklch, var(--foreground) 12%, transparent);
-      filter: saturate(0.58) contrast(0.96) brightness(1.06);
+    .brand-mark {
+      width: 38px;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.18));
     }
 
-    .brand-name {
-      font-size: 14px;
+    .brand-wordmark {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.28em;
+      font-family: var(--font-logo);
+      font-size: 20px;
       font-weight: 700;
-      letter-spacing: 0;
+      letter-spacing: 0.075em;
+      line-height: 1;
+      text-transform: uppercase;
+      transform: scaleX(1.12);
+      transform-origin: left center;
+    }
+
+    .brand-wordmark-open {
+      color: var(--foreground);
+      text-shadow:
+        0 1px 0 color-mix(in oklch, var(--foreground) 24%, transparent),
+        0 6px 18px rgba(0, 0, 0, 0.24);
+    }
+
+    .brand-wordmark-gsd {
+      color: var(--logo-blue-strong);
+      text-shadow:
+        0 1px 0 color-mix(in oklch, var(--logo-blue-strong) 18%, transparent),
+        0 6px 18px rgba(var(--accent-shadow), 0.24);
+    }
+
+    .brand-product {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
     }
 
     .nav-links {
@@ -276,11 +316,9 @@
     .hero-copy strong { color: var(--foreground); font-weight: 600; }
 
     .hero-logo {
-      width: 112px;
-      height: 112px;
-      border-radius: 22px;
-      outline: 1px solid color-mix(in oklch, var(--foreground) 12%, transparent);
-      filter: saturate(0.58) contrast(0.96) brightness(1.06);
+      width: 148px;
+      height: auto;
+      filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.22));
     }
 
     .hero-note {
@@ -481,11 +519,9 @@
     }
 
     .footer-brand img {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      outline: 1px solid color-mix(in oklch, var(--foreground) 12%, transparent);
-      filter: saturate(0.58) contrast(0.96) brightness(1.06);
+      width: 34px;
+      height: auto;
+      filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.18));
     }
 
     .footer-links {
@@ -533,8 +569,12 @@
     <header class="nav">
       <nav class="nav-inner" aria-label="Main navigation">
         <a class="brand" href="https://opengsd.net">
-          <img src="https://opengsd.net/opengsd-logo.png" alt="Open GSD">
-          <span class="brand-name">Open GSD Marketplace</span>
+          <img class="brand-mark" src="/open-gsd-mark.png" alt="">
+          <span class="brand-wordmark">
+            <span class="brand-wordmark-open">OPEN</span>
+            <span class="brand-wordmark-gsd">GSD</span>
+          </span>
+          <span class="brand-product">Marketplace</span>
         </a>
         <div class="nav-links">
           <a href="#catalog">Catalog</a>
@@ -556,7 +596,7 @@
                 <strong>Install less ceremony, ship more verified work.</strong>
               </p>
             </div>
-            <img class="hero-logo" src="https://opengsd.net/opengsd-logo.png" alt="" aria-hidden="true">
+            <img class="hero-logo" src="/open-gsd-mark.png" alt="" aria-hidden="true">
           </div>
 
           <p class="hero-note">
@@ -643,7 +683,7 @@
     <footer class="footer">
       <div class="footer-inner">
         <div class="footer-brand">
-          <img src="https://opengsd.net/opengsd-logo.png" alt="" aria-hidden="true">
+          <img src="/open-gsd-mark.png" alt="" aria-hidden="true">
           <span>Open GSD</span>
         </div>
         <div class="footer-links">
